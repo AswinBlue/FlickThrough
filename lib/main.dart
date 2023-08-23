@@ -1,18 +1,16 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:universal_io/io.dart'; // Import universal_io
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
-import 'dart:html' as html; // Import the html package for web
-import 'package:flutter/foundation.dart' show kIsWeb; // Import kIsWeb from foundation.dart
+// import 'package:flutter/foundation.dart' show kIsWeb; // Import kIsWeb from foundation.dart
+import 'cross_platform.dart';
 
 void main() {
-  runApp(MyApp(isWeb: kIsWeb)); // Pass the value of kIsWeb to the widget
+  runApp(MyApp()); // Pass the value of kIsWeb to the widget
 }
 
 class MyApp extends StatelessWidget {
-  final bool isWeb; // Add the isWeb parameter
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +19,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(isWeb: isWeb), // Pass isWeb to MyHomePage
+      home: MyHomePage(), // Pass isWeb to MyHomePage
     );
   }
-
-  MyApp({required this.isWeb}); // Constructor
 }
 
 class MyHomePage extends StatefulWidget {
-  final bool isWeb;
 
-  MyHomePage({required this.isWeb});
+  MyHomePage();
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -120,46 +115,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> loadTextFile() async {
-    if (kIsWeb) {
-      // Code for web
-      final html.FileUploadInputElement input = html.FileUploadInputElement();
-      input.click(); // Simulate a click on the file input element
-      input.onChange.listen((e) {
-        final file = input.files!.first;
-        final reader = html.FileReader();
-        reader.readAsText(file, 'UTF-8');
-        reader.onLoadEnd.listen((e) {
-          if (reader.readyState == html.FileReader.DONE) {
-            // split into string
-            final content = reader.result as String;
-            setState(() {
-              currentWordIndex = 0;
-              words = splitWords(content);
-              currentWord = words![currentWordIndex]; // Reset the current word
-              totalWords = words!.length;
-            });
-          }
-        });
-      });
-    } else {
-      // Code for mobile devices using file_picker package
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['txt'],
-      );
-
-      if (result != null) {
-        File? selectedFile = File(result.files.single.path!);; // Track the selected file
-        String fileContent = await selectedFile!.readAsString();
-
-        setState(() {
-          currentWordIndex = 0;
-          words = splitWords(fileContent);
-          currentWord = words![currentWordIndex]; // Reset the current word
-          totalWords = words!.length;
-        });
-      } // -> if result
-    } // -> else
+    FileLoader.loadFile((content) {
+      currentWordIndex = 0;
+      words = splitWords(content);
+      currentWord = words![currentWordIndex]; // Reset the current word
+      totalWords = words!.length;
+    });
   }
 
   double calculateProgress() {
@@ -249,8 +210,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: isReading ? pauseReading : startReading,
                 ),
                 Container(
-                  width: 500,
-                  child : Slider(
+                  width: MediaQuery.of(context).size.width * 0.6, // Adjust the width as needed
+                  child: Slider(
                     value: delay,
                     min: minDelay,
                     max: maxDelay,

@@ -1,7 +1,7 @@
 import 'cross_platform.dart';
 import 'dart:html' as html;  // Import the html package for web
 
-class AppFileLoader implements FileLoader {
+class FileLoader implements AbstractFileLoader {
   @override
   Future<void> loadFile(Function callback) async {
     // Code for web

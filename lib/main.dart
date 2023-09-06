@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
+import 'package:flick_through/app.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_io/io.dart'; // Import universal_io
 import 'dart:async';
@@ -11,6 +12,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  AbstractFileLoader fileLoader = FileLoader(); // file loading interface
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +21,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(), // Pass isWeb to MyHomePage
+      home: MyHomePage(fileLoader:fileLoader), // Pass isWeb to MyHomePage
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-
-  MyHomePage();
+  // MyHomePage({Key? fileLoader}) : super(key: fileLoader);
+  MyHomePage({required this.fileLoader});
+  AbstractFileLoader fileLoader;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(fileLoader:fileLoader);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -41,7 +44,20 @@ class _MyHomePageState extends State<MyHomePage> {
   double maxDelay = 1.0;
   int currentWordIndex = 0;
   int totalWords = 0;
+  // AbstractFileLoader get fileLoader => widget.fileLoader;
+  AbstractFileLoader fileLoader;
   List<String>? words = null;
+
+  _MyHomePageState({required this.fileLoader});
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // You can now access 'fileLoader' directly in this state class
+  //   fileLoader.loadFile((content) {
+  //     // Your code here
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -115,12 +131,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> loadTextFile() async {
-    FileLoader.loadFile((content) {
-      currentWordIndex = 0;
-      words = splitWords(content);
-      currentWord = words![currentWordIndex]; // Reset the current word
-      totalWords = words!.length;
-    });
+    try{
+      this.fileLoader.loadFile((content) {
+        currentWordIndex = 0;
+        words = splitWords(content);
+        currentWord = words![currentWordIndex]; // Reset the current word
+        totalWords = words!.length;
+      });
+    } catch(e) {
+      print("Error: $e");
+    }
   }
 
   double calculateProgress() {

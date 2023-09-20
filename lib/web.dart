@@ -1,7 +1,9 @@
 import 'cross_platform.dart';
 import 'dart:html' as html;  // Import the html package for web
 
-class FileLoader implements AbstractFileLoader {
+AbstractFileLoader getFileLoader() => WebFileLoader();
+
+class WebFileLoader implements AbstractFileLoader {
   @override
   Future<void> loadFile(Function callback) async {
     // Code for web
@@ -9,6 +11,7 @@ class FileLoader implements AbstractFileLoader {
 
     input.click(); // Simulate a click on the file input element
     input.onChange.listen((e) {
+      print('Web file result : $e');
       final file = input.files!.first;
       final reader = html.FileReader();
       reader.readAsText(file, 'UTF-8');
@@ -22,3 +25,4 @@ class FileLoader implements AbstractFileLoader {
     });
   }
 }
+

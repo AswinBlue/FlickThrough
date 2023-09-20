@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
-import 'package:flick_through/app.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_io/io.dart'; // Import universal_io
 import 'dart:async';
@@ -8,11 +7,13 @@ import 'dart:async';
 import 'cross_platform.dart';
 
 void main() {
-  runApp(MyApp()); // Pass the value of kIsWeb to the widget
+  AbstractFileLoader fileLoader = getFileLoader(); // file loading interface
+  runApp(MyApp(fileLoader: fileLoader)); // Pass the value of kIsWeb to the widget
 }
 
 class MyApp extends StatelessWidget {
-  AbstractFileLoader fileLoader = FileLoader(); // file loading interface
+  MyApp({super.key, required this.fileLoader});
+  AbstractFileLoader fileLoader;
 
   @override
   Widget build(BuildContext context) {

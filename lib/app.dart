@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'cross_platform.dart';
 
-class FileLoader implements AbstractFileLoader {
+AbstractFileLoader getFileLoader() => AppFileLoader();
+
+class AppFileLoader implements AbstractFileLoader {
   @override
   Future<void> loadFile(Function callback) async {
     // Code for mobile devices using file_picker package
@@ -11,7 +13,7 @@ class FileLoader implements AbstractFileLoader {
       allowedExtensions: ['txt'],
     );
     if (result != null && result.files.isNotEmpty) {
-      print('result : $result');
+      // print('App file result : $result');
       try {
         File selectedFile = File(result.files.single.path!); // Get the selected file
         String fileContent = await selectedFile.readAsString(); // Read file as text
@@ -23,3 +25,4 @@ class FileLoader implements AbstractFileLoader {
     } // -> if result
   }
 }
+

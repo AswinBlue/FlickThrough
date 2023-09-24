@@ -1,9 +1,7 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
 import 'package:flutter/material.dart';
-import 'package:universal_io/io.dart'; // Import universal_io
 import 'dart:async';
-// import 'package:flutter/foundation.dart' show kIsWeb; // Import kIsWeb from foundation.dart
 import 'cross_platform.dart';
 
 void main() {

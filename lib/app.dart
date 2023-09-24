@@ -9,7 +9,7 @@ class AppFileLoader implements AbstractFileLoader {
   @override
   Future<void> loadFile(Function callback) async {
     // check permission for read external storage
-    var permission = await requestStoragePermission();
+    var permission = await();
     if (permission != true) {
       print("Permission Denied");
       return;

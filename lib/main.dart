@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'cross_platform.dart';
+import 'custom_dialog.dart';
 
 void main() {
   AbstractFileLoader fileLoader = getFileLoader(); // file loading interface
@@ -71,6 +72,12 @@ class _MyHomePageState extends State<MyHomePage> {
       isReading = true;
       isPaused = false;
     });
+
+    // if cursor is already in the end, start from beginning
+    if (currentWordIndex == totalWords)
+    {
+      currentWordIndex = 0;
+    }
 
     // Read and process the text file from 'selectedFile'
     // Stream the words for reading
@@ -249,6 +256,25 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: loadTextFile,
               child: Text('Load Text File'),
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () async {
+                final result = await showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CustomDialog();
+                  },
+                );
+                if (result != null) {
+                  currentWordIndex = 0;
+                  words = splitWords(result);
+                  currentWord = words![currentWordIndex]; // Reset the current word
+                  totalWords = words!.length;
+                  print('Entered Text: $result');
+                }
+              },
+              child: Text('Paste from clip board'),
             ),
           ],
         ),

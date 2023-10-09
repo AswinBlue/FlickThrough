@@ -33,7 +33,13 @@ dependencies:
   file_picker: ^4.0.10 # Make sure to specify the latest version
   permission_handler: ^10.4.3
   universal_io: ^2.0.4 # Add this line
+  intl: ^0.18.0
+  flutter_localizations:
+    sdk: flutter
 
+flutter_icons:
+  android: "launcher_icon"
+  image_path: "images/icon.png"
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -43,6 +49,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^2.4.6
+  intl_translation: ^0.18.2
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -56,7 +64,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  generate: true # 자동생성 활성화
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -5,6 +5,11 @@ import 'dart:async';
 import 'cross_platform.dart';
 import 'custom_dialog.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
+
+
 void main() {
   AbstractFileLoader fileLoader = getFileLoader(); // file loading interface
   runApp(MyApp(fileLoader: fileLoader)); // Pass the value of kIsWeb to the widget
@@ -21,7 +26,30 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(fileLoader:fileLoader), // Pass isWeb to MyHomePage
+
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        AppLocalizations.delegate, // custom delegate
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      // template-arb-file 로 대체되는것 같아 제거함
+      // localeListResolutionCallback: (locales, supportedLocales) {
+      //   print('device locales=$locales supported locales=$supportedLocales');
+      //   for (Locale locale in locales!) {
+      //     // if device language is supported by the app,
+      //     // just return it to set it as current app language
+      //     if (supportedLocales.contains(locale)) {
+      //       return locale;
+      //     }
+      //   }
+      //   // if language of current location is not supported, use english
+      //   return Locale('en');
+      // },
+
+      home: MyHomePage(fileLoader:fileLoader),
+
     );
   }
 }
@@ -179,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Text File Reader'),
+        title: Text(AppLocalizations.of(context).textFileReader),
       ),
       body: Center(
         child: Column(
@@ -274,7 +302,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   print('Entered Text: $result');
                 }
               },
-              child: Text('Paste from clip board'),
+              child: Text(AppLocalizations.of(context).pasteFromClipBoard),
             ),
           ],
         ),

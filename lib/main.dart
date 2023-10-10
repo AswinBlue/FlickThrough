@@ -22,11 +22,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Text File Reader',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -48,6 +43,11 @@ class MyApp extends StatelessWidget {
       //   return Locale('en');
       // },
 
+
+      title: 'Flick Through',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
       home: MyHomePage(fileLoader:fileLoader),
 
     );
@@ -207,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).textFileReader),
+        title: Text(AppLocalizations.of(context).flickThrough),
       ),
       body: Center(
         child: Column(
@@ -283,7 +283,7 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: loadTextFile,
-              child: Text('Load Text File'),
+              child: Text(AppLocalizations.of(context).loadTextFile),
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
